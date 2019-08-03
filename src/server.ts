@@ -31,13 +31,17 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
 
   //! END @TODO1
   app.get("/filteredimage", async (req, res) => {
-    const { image_url } = req.query
+    const { image_url: imageUrl } = req.query
 
-    if (!isUrl(image_url)) {
+    if (!isUrl(imageUrl)) {
       return res.status(400).send({ error: 'image_url is invalid' })
     }
 
-    const img = await filterImageFromURL(image_url)
+    if (!isImage(imageUrl)) {
+      return res.status(422).send({ error: 'image_url is not an image' })
+    }
+
+    const img = await filterImageFromURL(imageUrl)
     res.sendFile(img, async () => {
       await deleteLocalFiles([img])
     })
@@ -50,6 +54,10 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
     } catch (e) {
       return false
     }
+  }
+
+  const isImage = (imageUrl: string) => {
+      return imageUrl.match(/\.(jpeg|jpg|gif|png)$/);
   }
 
   // Root Endpoint

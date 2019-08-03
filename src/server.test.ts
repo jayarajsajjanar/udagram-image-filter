@@ -31,6 +31,14 @@ describe('Image filter api', () => {
         expect(response.body).toEqual({ error: 'image_url is invalid' })
     })
 
+    it('returns an error when the image_url parameter is not an image', async () => {
+        const response = await request(server)
+        .get('/filteredimage?image_url=http://www.google.com')
+        .expect(422)
+
+        expect(response.body).toEqual({ error: 'image_url is not an image' })
+    })
+
     afterAll(() => {
         server.close()
     })
