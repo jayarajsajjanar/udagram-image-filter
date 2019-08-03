@@ -30,6 +30,9 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
+  app.get("/filteredimage", async (req, res) => {
+      res.status(200).send()
+  });
   
   // Root Endpoint
   // Displays a simple message to the user
@@ -43,4 +46,8 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       console.log( `server running http://localhost:${ port }` );
       console.log( `press CTRL+C to stop server` );
   } );
+
+  module.exports = app
 })();
+
+
