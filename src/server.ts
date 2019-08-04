@@ -26,10 +26,14 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
       return res.status(422).send({ error: 'image_url is not an image' })
     }
 
-    const img = await filterImageFromURL(imageUrl)
-    res.sendFile(img, async () => {
-      await deleteLocalFiles([img])
-    })
+    try {
+      const img = await filterImageFromURL(imageUrl)
+      return res.sendFile(img, async () => {
+        await deleteLocalFiles([img])
+      })
+    } catch (e) {
+      return res.status(422).send({ error: 'image_url could not be processed' })
+    }
   });
 
   const isUrl = (imageUrl: string) => {
@@ -42,7 +46,7 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
   }
 
   const isImage = (imageUrl: string) => {
-      return imageUrl.match(/\.(jpeg|jpg|gif|png)$/);
+    return imageUrl.match(/\.(jpeg|jpg|gif|png)$/);
   }
 
   // Root Endpoint

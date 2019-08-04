@@ -51,6 +51,18 @@ describe('Image filter api', () => {
         expect(response.body).toEqual({ error: 'image_url is not an image' })
     })
 
+    it(`returns an error when the image_url doesn't exist`, async () => {
+        nock('http://localhost')
+            .get('/unknown.jpg')
+            .reply(404)
+
+        const response = await request(server)
+            .get('/filteredimage?image_url=http://localhost/unknown.jpg')
+            .expect(422)
+
+        expect(response.body).toEqual({ error: 'image_url could not be processed' })
+    })
+
     afterAll(() => {
         server.close()
     })
