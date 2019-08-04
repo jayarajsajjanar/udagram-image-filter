@@ -6,7 +6,6 @@ const server = require('./server')
 
 describe('Image filter api', () => {
     describe('filter image', () => {
-
         beforeEach(() => {
             nock('http://localhost')
                 .get('/kitten.jpg')
